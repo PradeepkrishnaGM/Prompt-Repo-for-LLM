@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "EmailReplyOutput",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["subject", "body", "tone", "language", "follow_ups"],
+  "properties": {
+    "subject": { "type": "string", "minLength": 1 },
+    "body": { "type": "string", "minLength": 1 },
+    "tone": {
+      "type": "string",
+      "enum": ["friendly", "neutral", "formal", "apologetic", "assertive"]
+    },
+    "language": {
+      "type": "string",
+      "enum": ["en", "de"]
+    },
+    "follow_ups": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}
