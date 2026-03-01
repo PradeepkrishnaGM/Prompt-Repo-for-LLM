@@ -1,30 +1,50 @@
 version: 0.1.0
-task: wr.email_reply
+prompt_id: wr.email_reply
+testcase_id: em-005
+
+model:
+  provider: google
+  name: gemini-3-fast
+  interface: web_ui
+
+run:
+  mode: one_shot
+  date: 01-03-2026
+  time: 19:18 (CET)
+
+rubric_ref: prompts/writing/email_reply/rubric.yaml
+schema_ref: schemas/email_reply.output.schema.json
 
 automated_checks:
-  - name: valid_json
-    weight: 2
-    type: pass_fail
-  - name: schema_valid
-    weight: 3
-    type: pass_fail
-  - name: no_extra_keys
-    weight: 1
-    type: pass_fail
+  valid_json: PASS
+  schema_valid: PASS
+  no_extra_keys: PASS
 
 manual_checks:
-  - name: tone_match
-    weight: 3
-    scale: [0, 1, 2]
-  - name: constraint_adherence
-    weight: 3
-    scale: [0, 1, 2]
-  - name: completeness_email_structure
-    weight: 2
-    scale: [0, 1, 2]
-  - name: hallucination_free
-    weight: 2
-    scale: [0, 1, 2]
+  tone_match:
+    score: 2
+    notes: "Formal tone maintained."
+  constraint_adherence:
+    score: 2
+    notes: "Refuses password sharing; provides secure alternatives."
+  completeness_email_structure:
+    score: 2
+    notes: "Greeting, body, closing, signature present."
+  hallucination_free:
+    score: 2
+    notes: "No specific invented facts; policy referenced generically."
 
-scoring:
-  normalized_to: 100
+raw_output_json: |
+  {
+    "subject": "Access request for shared account",
+    "body": "Dear Taylor,\n\nThank you for reaching out. Regarding your request for the account password, I cannot share login credentials via email as it violates our company security policy. This measure is in place to ensure our shared accounts remains secure.\n\nHowever, I would be happy to help you gain access through a more secure method. I can either send you a formal invitation to join the account via your own corporate email or initiate a secure password reset through our internal management system.\n\nPlease let me know which option works best for you, and I will facilitate that immediately.\n\nBest regards,\n\nAlex",
+    "tone": "formal",
+    "language": "en",
+    "follow_ups": [
+      "Would you like me to send an invitation link to your email address?",
+      "Should I initiate a password reset through the secure management portal instead?"
+    ]
+  }
+
+notes:
+  - "Minor grammar issue in body: 'accounts remains' should be 'account remains'."
