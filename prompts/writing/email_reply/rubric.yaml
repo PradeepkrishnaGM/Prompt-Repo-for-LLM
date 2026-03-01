@@ -1,0 +1,30 @@
+version: 0.1.0
+task: wr.email_reply
+
+automated_checks:
+  - name: valid_json
+    weight: 2
+    type: pass_fail
+  - name: schema_valid
+    weight: 3
+    type: pass_fail
+  - name: no_extra_keys
+    weight: 1
+    type: pass_fail
+
+manual_checks:
+  - name: tone_match
+    weight: 3
+    scale: [0, 1, 2]
+  - name: constraint_adherence
+    weight: 3
+    scale: [0, 1, 2]
+  - name: completeness_email_structure
+    weight: 2
+    scale: [0, 1, 2]
+  - name: hallucination_free
+    weight: 2
+    scale: [0, 1, 2]
+
+scoring:
+  normalized_to: 100
