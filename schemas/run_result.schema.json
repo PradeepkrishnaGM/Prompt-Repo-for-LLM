@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "PromptBenchRunResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "version",
+    "prompt_id",
+    "testcase_id",
+    "model",
+    "run",
+    "rubric_ref",
+    "schema_ref",
+    "automated_checks",
+    "manual_checks",
+    "raw_output_json"
+  ],
+  "properties": {
+    "version": { "type": "string", "minLength": 1 },
+    "prompt_id": { "type": "string", "minLength": 1 },
+    "testcase_id": { "type": "string", "minLength": 1 },
+
+    "model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "name", "interface"],
+      "properties": {
+        "provider": { "type": "string", "minLength": 1 },
+        "name": { "type": "string", "minLength": 1 },
+        "interface": { "type": "string", "enum": ["web_ui", "api", "local"] }
+      }
+    },
+
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "date", "timezone"],
+      "properties": {
+        "mode": { "type": "string", "enum": ["one_shot", "two_turn"] },
+        "date": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "timezone": { "type": "string", "minLength": 1 }
+      }
+    },
+
+    "rubric_ref": { "type": "string", "minLength": 1 },
+    "schema_ref": { "type": "string", "minLength": 1 },
+
+    "automated_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["valid_json", "schema_valid", "no_extra_keys"],
+      "properties": {
+        "valid_json": { "type": "string", "enum": ["PASS", "FAIL"] },
+        "schema_valid": { "type": "string", "enum": ["PASS", "FAIL"] },
+        "no_extra_keys": { "type": "string", "enum": ["PASS", "FAIL"] }
+      }
+    },
+
+    "manual_checks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tone_match",
+        "constraint_adherence",
+        "completeness_email_structure",
+        "hallucination_free"
+      ],
+      "properties": {
+        "tone_match": { "$ref": "#/$defs/scored_check" },
+        "constraint_adherence": { "$ref": "#/$defs/scored_check" },
+        "completeness_email_structure": { "$ref": "#/$defs/scored_check" },
+        "hallucination_free": { "$ref": "#/$defs/scored_check" }
+      }
+    },
+
+    "raw_output_json": { "type": "string", "minLength": 2 },
+
+    "notes": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+
+  "$defs": {
+    "scored_check": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["score"],
+      "properties": {
+        "score": { "type": "integer", "minimum": 0, "maximum": 2 },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}
