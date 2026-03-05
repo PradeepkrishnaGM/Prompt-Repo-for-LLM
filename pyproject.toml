@@ -1,1 +1,40 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
 
+[project]
+name = "prl"
+version = "0.1.0"
+description = "Prompt-Repo-for-LLM (PRL): a tested, versioned prompt registry for LLM applications."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0 (code) / CC0-1.0 (content). See LICENSE-CODE and LICENSE-CONTENT." }
+authors = [{name = "PRL Contributors"}]
+dependencies = [
+  "pydantic>=2.6",
+  "jinja2>=3.1",
+  "pyyaml>=6.0",
+  "typer>=0.12",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=8.0",
+]
+
+[project.scripts]
+prl = "prl.cli:app"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["prl*"]
+
+[tool.setuptools.package-data]
+prl = ["prompts/**/*.yaml", "prompts/**/*.yml", "prompts/**/*.j2", "eval/result_schema.json", "eval/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
