@@ -1,30 +1,34 @@
-# Prompt-Repo-for-LLM (v0.1.0)
+# Prompt-Repo-for-LLM (v1.0.0)
 
-Domain-specific prompt library with structured output contracts, test cases, rubrics, and benchmark reports.
+A domain-specific Python 3.11+ prompt library with structured output contracts, test cases, and benchmark reports.
 
-## What this repo contains (v0.1.0)
-- **Prompt specs** (YAML): reusable prompt templates with clear input/output contracts
-- **Output schemas** (JSON Schema): standard, machine-checkable outputs
-- **Test cases** (JSONL): inputs + expected outcomes
-- **Rubrics** (YAML): scoring guidance
-- **Failure galleries** (Markdown): documented failure modes and mitigations
-- **Benchmarks** (Markdown): manual benchmark reports across models
+It provides:
 
-## Current domain
-- `customer_support`
+- A **prompt registry** that loads prompts from disk (YAML + Jinja2 templates) and selects by id/version plus optional filters.
+- **Typed inputs** via Pydantic models (one model per prompt).
+- **Output contracts** (JSON contracts and/or markdown contracts) plus deterministic **validation**.
+- An optional **repair flow** that generates a “fix your output” instruction when validation fails.
+- A provider-agnostic **evaluation harness** with a `ModelBackend` protocol and a deterministic `MockBackend`.
+- A **CLI** and Python API.
+- A manual benchmarking workflow for ChatGPT/Claude/Gemini/Grok UIs (no keys, no integrations).
 
-## Current prompt
-- `cs.classify_ticket` — ticket classification into category/priority/sentiment/escalation
+## Install (editable)
 
-## How to use (manual, v0.1.0)
-1. Open: `prompts/customer_support/classify_ticket/prompt.yaml`
-2. Pick a testcase from: `prompts/customer_support/classify_ticket/tests.jsonl`
-3. Paste into your LLM UI (ChatGPT / Claude / Gemini / DeepSeek)
-4. Verify output matches schema: `schemas/classify_ticket.output.schema.json`
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .[dev]
 
 ## Licensing
-- **Code** (anything under `src/` and tooling files): Apache-2.0 — see `LICENSE-CODE`
-- **Content** (prompts, tests, benchmark data, docs examples): CC0-1.0 — see `LICENSE-CONTENT`
+
+This repository uses two licenses:
+
+- **Code** (Python source, CLI, evaluation runner, tests, examples): **Apache-2.0** — see `LICENSE-CODE`.
+- **Content** (prompt templates, prompt metadata YAML, evaluation case files, benchmark artifacts): **CC0-1.0** — see `LICENSE-CONTENT`.
+
+Suggested mapping (adjust if you want):
+- Code: `prl/**/*.py`, `tests/**/*.py`, `examples/**/*.py`, `pyproject.toml`
+- Content: `prl/prompts/**`, `eval_cases/**`, `eval_results/**` (records you commit)
 
 ## Roadmap
 - Add 2 more customer support prompts (summarize + draft response)
